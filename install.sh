@@ -26,9 +26,9 @@ echo "Adding backports repo..."
 echo "deb http://deb.debian.org/debian $CODENAME-backports main contrib non-free non-free-firmware" | sudo tee /etc/apt/sources.list.d/backports.list
 sudo apt update
 
-# Install latest kernel and headers from backports
-echo "Installing latest kernel and headers from backports..."
-sudo apt install -y -t "$CODENAME-backports" linux-image-amd64 linux-headers-amd64
+# Install latest kernel, headers and firmware from backports
+echo "Installing latest kernel, headers and firmware from backports..."
+sudo apt install -y -t "$CODENAME-backports" linux-image-amd64 linux-headers-amd64 firmware-misc-nonfree
 
 # Detect GPUs present
 GPU_INTEL=$(lspci | grep -i 'vga\|3d\|display' | grep -i intel || true)
@@ -66,24 +66,24 @@ fi
 # Install KDE and networking tools
 bash utils/kde.sh "$CODENAME"
 
-# Generate reinstall-gpu.sh (also reinstalls kernel and headers)
+# Generate reinstall-gpu.sh (also reinstalls kernel, headers and firmware)
 cat <<EOF > ~/reinstall-gpu.sh
 #!/bin/bash
 set -e
 sudo apt update
 sudo apt full-upgrade -y
-sudo apt install -y -t $CODENAME-backports linux-image-amd64 linux-headers-amd64
+sudo apt install -y -t $CODENAME-backports linux-image-amd64 linux-headers-amd64 firmware-misc-nonfree
 EOF
 
 # Append driver reinstall commands based on detected GPUs
 if [[ -n "$GPU_INTEL" ]]; then
-    echo "bash ~/debian-gpu-kde-install/drivers/intel.sh $CODENAME" >> ~/reinstall-gpu.sh
+    echo "bash ~/.setup/debian-autodriver-install/drivers/intel.sh $CODENAME" >> ~/reinstall-gpu.sh
 fi
 if [[ -n "$GPU_NVIDIA" ]]; then
-    echo "bash ~/debian-gpu-kde-install/drivers/nvidia.sh $CODENAME" >> ~/reinstall-gpu.sh
+    echo "bash ~/.setup/debian-autodriver-install/drivers/nvidia.sh $CODENAME" >> ~/reinstall-gpu.sh
 fi
 if [[ -n "$GPU_AMD" ]]; then
-    echo "bash ~/debian-gpu-kde-install/drivers/amd.sh $CODENAME" >> ~/reinstall-gpu.sh
+    echo "bash ~/.setup/debian-autodriver-install/drivers/amd.sh $CODENAME" >> ~/reinstall-gpu.sh
 fi
 
 chmod +x ~/reinstall-gpu.sh
