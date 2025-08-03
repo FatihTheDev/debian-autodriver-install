@@ -2,7 +2,7 @@
 set -e
 CODENAME=$1
 
-echo "🔧 Installing NVIDIA proprietary drivers from $CODENAME-backports..."
+echo "Installing NVIDIA proprietary drivers from $CODENAME-backports..."
 sudo apt install -y -t $CODENAME-backports \
     nvidia-driver \
     nvidia-settings \
@@ -20,9 +20,9 @@ EOF
 
   sudo chmod +x /usr/local/bin/nvidia-run
 
-  echo "✅ Use 'nvidia-run <app>' to launch apps using the NVIDIA GPU"
+  echo "Use 'nvidia-run <app>' to launch apps using the NVIDIA GPU"
 else
-  echo "ℹ️ This system does not appear to use Optimus (hybrid GPU setup)"
+  echo "This system does not appear to use Optimus (hybrid GPU setup)"
 fi
 
-echo "⚠️ A reboot is recommended to apply driver and kernel module changes."
+echo "A reboot is recommended to apply driver and kernel module changes."
