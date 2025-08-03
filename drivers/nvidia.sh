@@ -6,7 +6,7 @@ echo "Installing NVIDIA proprietary drivers from $CODENAME-backports..."
 sudo apt install -y -t $CODENAME-backports \
     nvidia-driver \
     nvidia-settings \
-    nvidia-vdpau-driver \
+    nvidia-vdpau-driver
 
 # Check for Intel iGPU (Optimus detection)
 if lspci | grep -i "vga" | grep -qi "intel"; then
